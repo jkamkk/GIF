@@ -3,28 +3,49 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>GIF Maker</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            text-align: center;
-            margin: 20px;
-        }
-        input[type="file"] {
-            margin-bottom: 20px;
-        }
-        #gifPreview {
-            margin-top: 20px;
-        }
-    </style>
+    <title>GIF.js Example</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gif.js/0.2.0/gif.min.js"></script>
 </head>
 <body>
-    <h1>GIF Maker</h1>
-    <input type="file" id="fileInput" multiple accept="image/*">
-    <button onclick="generateGIF()">Generate GIF</button>
-    <div id="gifPreview"></div>
+    <h1>GIF.js Example</h1>
+    <img id="output" alt="Generated GIF"/>
+    
+    <script>
+        // Function to create and display a GIF
+        function createGif() {
+            // Create a new GIF instance
+            var gif = new GIF({
+                workers: 2,
+                quality: 10
+            });
 
-    <script src="https://cdn.jsdelivr.net/npm/gif.js.optimized@0.0.4/gif.min.js"></script>
-    <script src="app.js"></script>
+            // Create an array of image URLs (or you can use any source of images)
+            var imageUrls = [
+                'https://via.placeholder.com/150/FF0000/FFFFFF?text=Frame+1',
+                'https://via.placeholder.com/150/00FF00/FFFFFF?text=Frame+2',
+                'https://via.placeholder.com/150/0000FF/FFFFFF?text=Frame+3'
+            ];
+
+            // Load and add each image as a frame
+            imageUrls.forEach(function(url, index) {
+                var img = new Image();
+                img.src = url;
+                img.onload = function() {
+                    gif.addFrame(img, {delay: 500}); // 500 ms delay between frames
+                    // If this is the last frame, render the GIF
+                    if (index === imageUrls.length - 1) {
+                        gif.on('finished', function(blob) {
+                            var url = URL.createObjectURL(blob);
+                            document.getElementById('output').src = url;
+                        });
+                        gif.render();
+                    }
+                };
+            });
+        }
+
+        // Call the function to create and display the GIF
+        createGif();
+    </script>
 </body>
 </html>
