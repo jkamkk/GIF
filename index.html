@@ -1,51 +1,12 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>GIF.js Example</title>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/gif.js/0.2.0/gif.min.js"></script>
+    <title>在线制作GIF</title>
 </head>
 <body>
-    <h1>GIF.js Example</h1>
-    <img id="output" alt="Generated GIF"/>
-    
-    <script>
-        // Function to create and display a GIF
-        function createGif() {
-            // Create a new GIF instance
-            var gif = new GIF({
-                workers: 2,
-                quality: 10
-            });
-
-            // Create an array of image URLs (or you can use any source of images)
-            var imageUrls = [
-                'https://via.placeholder.com/150/FF0000/FFFFFF?text=Frame+1',
-                'https://via.placeholder.com/150/00FF00/FFFFFF?text=Frame+2',
-                'https://via.placeholder.com/150/0000FF/FFFFFF?text=Frame+3'
-            ];
-
-            // Load and add each image as a frame
-            imageUrls.forEach(function(url, index) {
-                var img = new Image();
-                img.src = url;
-                img.onload = function() {
-                    gif.addFrame(img, {delay: 500}); // 500 ms delay between frames
-                    // If this is the last frame, render the GIF
-                    if (index === imageUrls.length - 1) {
-                        gif.on('finished', function(blob) {
-                            var url = URL.createObjectURL(blob);
-                            document.getElementById('output').src = url;
-                        });
-                        gif.render();
-                    }
-                };
-            });
-        }
-
-        // Call the function to create and display the GIF
-        createGif();
-    </script>
+    <input type="file" id="imageUpload" multiple accept="image/*" />
+    <input type="number" id="delay" placeholder="延迟（秒）" />
+    <button onclick="createGif()">创建GIF</button>
+    <img id="result" />
 </body>
 </html>
