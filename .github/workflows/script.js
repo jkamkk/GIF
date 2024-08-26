@@ -1,9 +1,10 @@
-document.getElementById('generateGif').addEventListener('click', () => {
+function generateGIF() {
     const fileInput = document.getElementById('fileInput');
-    const files = fileInput.files;
+    const gifPreview = document.getElementById('gifPreview');
+    gifPreview.innerHTML = ''; // Clear previous preview
 
-    if (files.length === 0) {
-        alert('Please upload at least one image.');
+    if (fileInput.files.length === 0) {
+        alert('Please select some images.');
         return;
     }
 
@@ -12,22 +13,26 @@ document.getElementById('generateGif').addEventListener('click', () => {
         quality: 10
     });
 
-    Array.from(files).forEach(file => {
+    Array.from(fileInput.files).forEach(file => {
         const reader = new FileReader();
-        reader.onload = (event) => {
+
+        reader.onload = function(event) {
             const img = new Image();
-            img.src = event.target.result;
-            img.onload = () => {
-                gif.addFrame(img, { delay: 500, dispose: -1 });
+            img.onload = function() {
+                gif.addFrame(img, { delay: 500 });
+                if (fileInput.files[fileInput.files.length - 1] === file) {
+                    gif.on('finished', function(blob) {
+                        const gifURL = URL.createObjectURL(blob);
+                        const gifImage = document.createElement('img');
+                        gifImage.src = gifURL;
+                        gifPreview.appendChild(gifImage);
+                    });
+                    gif.render();
+                }
             };
+            img.src = event.target.result;
         };
+        
         reader.readAsDataURL(file);
     });
-
-    gif.on('finished', (blob) => {
-        const gifContainer = document.getElementById('gifContainer');
-        gifContainer.innerHTML = `<img src="${URL.createObjectURL(blob)}" alt="Generated GIF">`;
-    });
-
-    gif.render();
-});
+}
