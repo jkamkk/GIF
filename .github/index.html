@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GIF Maker</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin: 20px;
+        }
+        input[type="file"] {
+            margin-bottom: 20px;
+        }
+        #gifPreview {
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <h1>GIF Maker</h1>
+    <input type="file" id="fileInput" multiple accept="image/*">
+    <button onclick="generateGIF()">Generate GIF</button>
+    <div id="gifPreview"></div>
+
+    <script src="https://cdn.jsdelivr.net/npm/gif.js.optimized@0.0.4/gif.min.js"></script>
+    <script src="app.js"></script>
+</body>
+</html>
